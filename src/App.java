@@ -18,43 +18,74 @@ public class App {
         return number;
     }
 
+    // UC4 and UC5
+    public static int play(int playerPos) {
+
+        if (playerPos == 100)
+            return playerPos;
+
+        int diceRoll = diceRoll();
+        int playOption = playOption();
+
+        System.out.println("diceroll: " + diceRoll + " ");
+
+        switch (playOption) {
+            case 0:
+                System.out.println("PlayOption: Snake");
+                playerPos = (playerPos - diceRoll) < 0 ? 0 : playerPos - diceRoll;
+                break;
+            case 1:
+                System.out.println("PlayOption: Ladder");
+                playerPos = (playerPos + diceRoll) > 100 ? playerPos : playerPos + diceRoll;
+                // if ladder plays once again
+                playerPos = play(playerPos);
+                break;
+
+            default:
+                System.out.println("PlayOption: No play");
+                break;
+        }
+
+        return playerPos;
+    }
+
     // UC1
     public static void main(String[] args) throws Exception {
         System.out.println("Welcome to the Snake and Ladder game");
 
-        int playerPos = 0;
+        int player1Pos = 0;
+        int player2Pos = 0;
 
         // UC6
-        int numDiceRoll = 0;
+        int numDiceRoll = 1;
 
-        // UC4 and UC5
-        while (playerPos < 100) {
-            int diceRoll = diceRoll();
-            int playOption = playOption();
+        // UC7
+        while (player1Pos < 100 && player2Pos < 100) {
+            System.out.println("---------- Move " + numDiceRoll + ": ---------  ");
 
-            System.out.println("----->Move " + numDiceRoll + ":  ");
-            System.out.println("diceroll: " + diceRoll + " ");
+            // player 1 turn
+            System.out.println("----PLAYER1----");
+            player1Pos = play(player1Pos);
+            System.out.println("Position of the Player1: " + player1Pos);
 
-            switch (playOption) {
-                case 0:
-                    System.out.println("PlayOption: Snake");
-                    playerPos = (playerPos - diceRoll) < 0 ? 0 : playerPos - diceRoll;
-                    break;
-                case 1:
-                    System.out.println("PlayOption: Ladder");
-                    playerPos = (playerPos + diceRoll) > 100 ? playerPos : playerPos + diceRoll;
-                    break;
+            // player 2 turn
+            System.out.println("----PLAYER2----");
+            player2Pos = play(player2Pos);
+            System.out.println("Position of the Player2: " + player2Pos);
 
-                default:
-                    System.out.println("PlayOption: No play");
-                    break;
+            if (player1Pos == 100) {
+                System.out.println("--------------------------");
+                System.out.println("** Player1 won the game **");
+                System.out.println("--------------------------");
+                break;
+            } else if (player2Pos == 100) {
+                System.out.println("--------------------------");
+                System.out.println("** Player2 won the game **");
+                System.out.println("--------------------------");
+                break;
             }
 
-            System.out.println("Position of the Player:" + playerPos);
             numDiceRoll++;
-
-            if (playerPos == 100)
-                break;
         }
 
         System.out.println("Number of times the dice was played: " + numDiceRoll);
